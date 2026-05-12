@@ -1,9 +1,0 @@
-{
-  "name": "fakeradar-logging-worker",
-  "version": "1.0.0",
-  "private": true,
-  "type": "module",
-  "dependencies": {
-    "amqplib": "^0.10.5"
-  }
-}
