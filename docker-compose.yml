@@ -26,6 +26,22 @@ services:
       RABBITMQ_DEFAULT_USER: fakeradar
       RABBITMQ_DEFAULT_PASS: yourpassword
 
+  logging-worker:
+    build:
+      context: ./logging-worker
+      dockerfile: Dockerfile
+    container_name: fakeradar-logging-worker
+    environment:
+      RABBITMQ_URL: amqp://fakeradar:yourpassword@rabbitmq:5672
+      LOG_QUEUE: fakeradar.logs
+      LOG_DIR: /app/logs
+    volumes:
+      - logging_worker_logs:/app/logs
+    depends_on:
+      rabbitmq:
+        condition: service_started
+    restart: unless-stopped
+
   ai:
     build:
       context: ./ai
@@ -62,3 +78,4 @@ services:
 
 volumes:
   postgres_data:
+  logging_worker_logs:
