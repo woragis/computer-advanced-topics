@@ -1,0 +1,82 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: fakeradar-postgres
+    environment:
+      POSTGRES_DB: fakeradar
+      POSTGRES_USER: fakeradar_user
+      POSTGRES_PASSWORD: yourpassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fakeradar_user -d fakeradar"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  ai:
+    build:
+      context: ./ai
+      dockerfile: Dockerfile
+    container_name: fakeradar-ai
+    ports:
+      - "8000:8000"
+    environment:
+      FAKERADAR_ENV: development
+      LLM_PROVIDER: ${LLM_PROVIDER:-anthropic}
+      LLM_API_KEY: ${LLM_API_KEY:-}
+      FACT_CHECK_API_KEY: ${FACT_CHECK_API_KEY:-}
+      SERPER_API_KEY: ${SERPER_API_KEY:-}
+      MAIN_SERVER_SECRET: ${MAIN_SERVER_SECRET:-}
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: fakeradar-api
+    ports:
+      - "8080:8080"
+    environment:
+      DATABASE_URL: postgresql://fakeradar_user:yourpassword@postgres:5432/fakeradar
+      AI_SERVER_URL: http://ai:8000
+      JWT_SECRET: dev_jwt_secret_must_be_at_least_16_chars
+      JWT_EXPIRES_IN: "86400s"
+      PORT: "8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ai:
+        condition: service_started
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: fakeradar-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  log-worker:
+    build:
+      context: ./logging-worker
+      dockerfile: Dockerfile
+    container_name: fakeradar-log-worker
+    environment:
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      LOG_QUEUE: app_logs
+      LOG_DIR: /logs
+    volumes:
+      - log_worker_data:/logs
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  log_worker_data:
