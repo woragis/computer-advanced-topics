@@ -4,3 +4,6 @@
 [submodule "ai"]
 	path = ai
 	url = git@github.com:woragis/computer-advanced-topics-ai.git
+[submodule "logging-worker"]
+	path = logging-worker
+	url = git@github.com:woragis/computer-advanced-topics-logging-worker.git

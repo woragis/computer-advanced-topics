@@ -16,6 +16,16 @@ services:
       timeout: 5s
       retries: 5
 
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: fakeradar-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: fakeradar
+      RABBITMQ_DEFAULT_PASS: yourpassword
+
   ai:
     build:
       context: ./ai
@@ -50,33 +60,5 @@ services:
       ai:
         condition: service_started
 
-  rabbitmq:
-    image: rabbitmq:3-management-alpine
-    container_name: fakeradar-rabbitmq
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  log-worker:
-    build:
-      context: ./logging-worker
-      dockerfile: Dockerfile
-    container_name: fakeradar-log-worker
-    environment:
-      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
-      LOG_QUEUE: app_logs
-      LOG_DIR: /logs
-    volumes:
-      - log_worker_data:/logs
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-
 volumes:
   postgres_data:
-  log_worker_data:
