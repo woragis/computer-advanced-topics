@@ -47,6 +47,8 @@ services:
       context: ./ai
       dockerfile: Dockerfile
     container_name: fakeradar-ai
+    env_file:
+      - .env
     ports:
       - "8000:8000"
     environment:
@@ -55,7 +57,8 @@ services:
       LLM_API_KEY: ${LLM_API_KEY:-}
       FACT_CHECK_API_KEY: ${FACT_CHECK_API_KEY:-}
       SERPER_API_KEY: ${SERPER_API_KEY:-}
-      MAIN_SERVER_SECRET: ${MAIN_SERVER_SECRET:-}
+      MAIN_SERVER_SECRET: ${MAIN_SERVER_SECRET:-dev-shared-secret-change-me}
+      AI_MOCK_LLM: ${AI_MOCK_LLM:-true}
 
   api:
     build:
