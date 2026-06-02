@@ -15,6 +15,7 @@ cp .env.example .env
 # Edite .env se tiver API keys; com AI_MOCK_LLM=true funciona sem chaves.
 
 docker compose up --build
+# sobe: postgres, rabbitmq, ai, api, logging-worker, frontend
 ```
 
 | Serviço         | URL                          |
@@ -22,7 +23,8 @@ docker compose up --build
 | API             | http://localhost:8080        |
 | AI (Swagger)    | http://localhost:8000/docs   |
 | RabbitMQ UI     | http://localhost:15672       |
-| Frontend (dev)  | http://localhost:5173        |
+| Frontend (Docker) | http://localhost:5173        |
+| Frontend (dev)    | http://localhost:5173 (`npm run dev`) |
 
 Credenciais RabbitMQ (dev): usuário `fakeradar`, senha `yourpassword`.
 

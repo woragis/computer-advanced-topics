@@ -373,9 +373,13 @@ Use esta seção para marcar o que já foi feito (data + responsável):
 
 | Data | Fase | O que foi feito | Responsável |
 |------|------|-----------------|-------------|
-|      |      |                 |             |
-|      |      |                 |             |
-|      |      |                 |             |
+| 2025-06-02 | 0 | .env.example, README, .gitignore, compose env_file | — |
+| 2025-06-02 | 1 | Build AI (spaCy 3.8), .dockerignore, mock LLM | — |
+| 2025-06-02 | 2 | Dockerfile backend (Prisma), stack Postgres/RabbitMQ/API | — |
+| 2025-06-02 | 3 | Fluxo POST /api/analyses → AI validado | — |
+| 2025-06-02 | 4 | Logging RabbitMQ (backend + AI → worker) | — |
+| 2025-06-02 | 5 | Frontend React (auth, dashboard, detalhe) | — |
+| 2025-06-02 | 6 | Healthchecks, frontend no compose, docs | — |
 
 ---
 
