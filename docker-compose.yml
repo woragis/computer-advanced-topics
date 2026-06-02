@@ -59,6 +59,11 @@ services:
       SERPER_API_KEY: ${SERPER_API_KEY:-}
       MAIN_SERVER_SECRET: ${MAIN_SERVER_SECRET:-dev-shared-secret-change-me}
       AI_MOCK_LLM: ${AI_MOCK_LLM:-true}
+      RABBITMQ_URL: amqp://fakeradar:yourpassword@rabbitmq:5672
+      LOG_QUEUE: fakeradar.logs
+    depends_on:
+      rabbitmq:
+        condition: service_started
 
   api:
     build:
@@ -73,9 +78,14 @@ services:
       JWT_SECRET: dev_jwt_secret_must_be_at_least_16_chars
       JWT_EXPIRES_IN: "86400s"
       PORT: "8080"
+      FRONTEND_ORIGIN: http://localhost:5173
+      RABBITMQ_URL: amqp://fakeradar:yourpassword@rabbitmq:5672
+      LOG_QUEUE: fakeradar.logs
     depends_on:
       postgres:
         condition: service_healthy
+      rabbitmq:
+        condition: service_started
       ai:
         condition: service_started
 
