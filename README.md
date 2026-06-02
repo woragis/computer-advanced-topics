@@ -76,6 +76,16 @@ cd logging-worker && npm install && npm run dev
 cd frontend && npm install && npm run dev
 ```
 
+## Testes E2E
+
+Com o stack no ar (`docker compose up --build`) e `AI_MOCK_LLM=false` no `.env`:
+
+```bash
+npm run test:e2e
+```
+
+Variáveis opcionais: `E2E_API_URL`, `E2E_AI_URL`, `E2E_ANALYSIS_TIMEOUT_MS` (padrão 120s para LLM real).
+
 ## Plano de conserto
 
 Veja [PLANO.md](./PLANO.md) para o roteiro fase a fase de integração e correções.

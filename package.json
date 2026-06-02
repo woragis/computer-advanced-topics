@@ -1,0 +1,7 @@
+{
+  "name": "fakeradar",
+  "private": true,
+  "scripts": {
+    "test:e2e": "node e2e/run.mjs"
+  }
+}
