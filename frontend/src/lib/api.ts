@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8080";
+export type Verdict = "RELIABLE" | "SUSPICIOUS" | "FAKE";
 
 export type User = { id: string; email: string };
 
@@ -17,7 +17,7 @@ export type Analysis = {
   inputText: string | null;
   rawText: string | null;
   credibilityScore: number;
-  verdict: "RELIABLE" | "SUSPICIOUS" | "FAKE";
+  verdict: Verdict;
   explanation: string | null;
   createdAt: string;
   claims: Claim[];
@@ -30,7 +30,10 @@ export type Analysis = {
   }>;
 };
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080";
+
 function authHeaders(): HeadersInit {
+  if (typeof window === "undefined") return { "Content-Type": "application/json" };
   const token = localStorage.getItem("token");
   return token
     ? { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }

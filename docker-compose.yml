@@ -93,7 +93,7 @@ services:
       JWT_SECRET: dev_jwt_secret_must_be_at_least_16_chars
       JWT_EXPIRES_IN: "86400s"
       PORT: "8080"
-      FRONTEND_ORIGIN: http://localhost:5173
+      FRONTEND_ORIGIN: http://localhost:3000
       RABBITMQ_URL: amqp://fakeradar:yourpassword@rabbitmq:5672
       LOG_QUEUE: fakeradar.logs
     depends_on:
@@ -119,10 +119,10 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        VITE_API_URL: http://localhost:8080
+        NEXT_PUBLIC_API_URL: http://localhost:8080
     container_name: fakeradar-frontend
     ports:
-      - "5173:80"
+      - "3000:3000"
     depends_on:
       api:
         condition: service_healthy

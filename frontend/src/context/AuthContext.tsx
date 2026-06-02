@@ -1,3 +1,5 @@
+"use client";
+
 import {
   createContext,
   useCallback,
@@ -7,7 +9,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { api, type User } from "../lib/api";
+import { api, type User } from "@/lib/api";
 
 type AuthContextValue = {
   user: User | null;
@@ -42,10 +44,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(u);
   }, []);
 
-  const register = useCallback(async (email: string, password: string) => {
-    await api.register(email, password);
-    await login(email, password);
-  }, [login]);
+  const register = useCallback(
+    async (email: string, password: string) => {
+      await api.register(email, password);
+      await login(email, password);
+    },
+    [login]
+  );
 
   const logout = useCallback(() => {
     localStorage.removeItem("token");

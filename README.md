@@ -23,8 +23,7 @@ docker compose up --build
 | API             | http://localhost:8080        |
 | AI (Swagger)    | http://localhost:8000/docs   |
 | RabbitMQ UI     | http://localhost:15672       |
-| Frontend (Docker) | http://localhost:5173        |
-| Frontend (dev)    | http://localhost:5173 (`npm run dev`) |
+| Frontend          | http://localhost:3000        |
 
 Credenciais RabbitMQ (dev): usuário `fakeradar`, senha `yourpassword`.
 
@@ -73,7 +72,7 @@ uvicorn app.main:app --reload --port 8000
 cd logging-worker && npm install && npm run dev
 
 # Frontend
-cd frontend && npm install && npm run dev
+cd frontend && cp .env.example .env.local && npm install && npm run dev
 ```
 
 ## Testes E2E
