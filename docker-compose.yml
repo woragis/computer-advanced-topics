@@ -96,6 +96,9 @@ services:
       FRONTEND_ORIGIN: http://localhost:3000
       RABBITMQ_URL: amqp://fakeradar:yourpassword@rabbitmq:5672
       LOG_QUEUE: fakeradar.logs
+      REANALYZE_COOLDOWN_HOURS: "24"
+      DELETE_WINDOW_MINUTES: "30"
+      PORTAL_PAGE_SIZE: "20"
     depends_on:
       postgres:
         condition: service_healthy

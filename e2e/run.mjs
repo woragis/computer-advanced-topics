@@ -118,10 +118,11 @@ async function main() {
       fail(`analysis failed: ${res.status} ${JSON.stringify(body)}`);
       return;
     }
-    if (!body?.id || !body?.verdict) {
+    if (!body?.id || !body?.verdict || !body?.contentItemId) {
       fail(`invalid analysis response: ${JSON.stringify(body)}`);
       return;
     }
+    if (body.fromCache === undefined) fail("missing fromCache in response");
     if (body.explanation?.includes("AI_MOCK_LLM")) {
       fail("response looks like mock LLM — set AI_MOCK_LLM=false and LLM_API_KEY");
       return;
@@ -138,6 +139,12 @@ async function main() {
     if (!res.ok || !Array.isArray(body)) fail(`list failed: ${res.status}`);
     else if (!body.some((a) => a.id === analysisId)) fail("created analysis not in list");
     else pass(`${body.length} analysis(es) in history`);
+  });
+
+  await test("GET /api/portal/items (public)", async () => {
+    const { res, body } = await fetchJson(`${API_URL}/api/portal/items`);
+    if (!res.ok || !Array.isArray(body?.items)) fail(`portal list failed: ${res.status}`);
+    else pass(`portal has ${body.items.length} item(s)`);
   });
 
   await test("Get analysis by id", async () => {
